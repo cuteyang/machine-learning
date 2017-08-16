@@ -23,7 +23,8 @@ rng = np.random.RandomState(42)
 clf = IsolationForest(max_samples=100, random_state=rng, contamination=0.015)
 clf.fit(pca_data)   #孤立森林算法
 y_pred = clf.predict(pca_data)
-abnormal_scores = MinMaxScaler().fit_transform(clf.decision_function(pca_data)) #异常得分情况并做归一化处理，越小越异常
+#abnormal_scores = MinMaxScaler().fit_transform(clf.decision_function(pca_data)) #异常得分情况并做归一化处理，越小越异常
+#更新sklearn库之后，原始异常得分出现负数，再使用归一化会报错，直接注释掉，负数也有大小，可能没有以前直观
 result = pd.concat([read_data,pd.Series(abnormal_scores)],axis=1,ignore_index=True)
 result.rename_axis({11:"abnormal_scores"},axis="columns",inplace=True)
 # print(result)

@@ -19,7 +19,7 @@ classify = read_data.iloc[:,10].values      #病人分类 2为良性，4为恶�
 data=Imputer().fit_transform(data)          #对nan求当前列的均值
 pca = PCA(n_components=3)                   #此处PCA降维后的特征数量取3，主要是通过22行计算累计方差百分比已超过80%，且3维数据比较好作图展示
 pca_data = pca.fit_transform(data)          #对data降维
-print(sum(pca.explained_variance_ratio_))
+print(sum(pca.explained_variance_ratio_))   #输出累计方差百分比
 rng = np.random.RandomState(42)
 def iforest(pca_data):
     clf = IsolationForest(max_samples=100, random_state=rng, contamination=0.015)

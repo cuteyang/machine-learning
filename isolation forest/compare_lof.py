@@ -17,7 +17,7 @@ data = read_data.iloc[:,1:10].values        #提取其中用于操作的特征
 id_per = read_data.iloc[:,0]                #病人编号
 classify = read_data.iloc[:,10].values      #病人分类 2为良性，4为恶性
 data=Imputer().fit_transform(data)          #对nan求当前列的均值
-pca = PCA(n_components=3)
+pca = PCA(n_components=3)                   #此处PCA降维后的特征数量取3，主要是通过22行计算累计方差百分比已超过80%，且3维数据比较好作图展示
 pca_data = pca.fit_transform(data)          #对data降维
 print(sum(pca.explained_variance_ratio_))
 rng = np.random.RandomState(42)

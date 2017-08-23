@@ -26,7 +26,7 @@ def iforest(pca_data):
     clf.fit(pca_data)  # 孤立森林算法
     y_pred = clf.predict(pca_data)
     tmp = clf.decision_function(pca_data)
-    # abnormal_scores = MinMaxScaler().fit_transform(tmp) #异常得分情况并做归一化处理，越小越异常
+    # abnormal_scores = MinMaxScaler().fit_transform(tmp) #异常得分情况并做归一化处理，越小越异常（出现负数，版本更新后）
     abnormal_scores = tmp
     result = pd.concat([read_data, pd.Series(abnormal_scores)], axis=1, ignore_index=True)
     result.rename_axis({11: "abnormal_scores"}, axis="columns", inplace=True)
@@ -41,10 +41,10 @@ def iforest(pca_data):
 def lof(pca_data):
     clf = LocalOutlierFactor(n_neighbors=350,contamination=0.015)
     y_pred = clf.fit_predict(pca_data)
-    abnormal_scores = clf.negative_outlier_factor_      #outliers tend to have a larger LOF score
+    abnormal_scores = clf.negative_outlier_factor_      #outliers tend to have a larger LOF score（还不清楚为什么是负数）
     result = pd.concat([read_data, pd.Series(abnormal_scores)], axis=1, ignore_index=True)
     result.rename_axis({11: "abnormal_scores"}, axis="columns", inplace=True)
-    output_result = result.sort_values(by="abnormal_scores",ascending=True).head(10)
+    output_result = result.sort_values(by="abnormal_scores").head(10)
     with open("outlier_result.csv",'a') as f:
         f.writelines('****lof****\n')
     output_result.to_csv("outlier_result.csv", encoding='utf-8',mode='a')  # 存储最有可能为异常点的10个数据
